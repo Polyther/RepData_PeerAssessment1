@@ -1,25 +1,59 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
+title: "My work: Reproducible Research: Project_1"
 output: 
   html_document:
     keep_md: true
 ---
 
-
 ## Loading and preprocessing the data
+```{r R_data, echo=TRUE}
+R_data <- read.csv('activity.csv')
+CD <- R_data[complete.cases(R_data), ]
+```
+
+## The total number of steps taken per day 
+```{r the total number of steps per day, echo=TRUE}
+total <- aggregate(CD$steps, by=list(CD$date), FUN = 'sum')
+head(total)
+```
+
+## the histogram for the total number of steps per day
+```{r histogram, echo=TRUE}
+hist(total$x, main='Histogram of total steps per day', xlab='')
+```
+
+## Mean and median number of steps taken each day
+```{r mean and median number, echo=TRUE}
+mean <- aggregate(CD$steps, by=list(CD$date), FUN='mean')
+head(mean)
+median <- aggregate(CD$steps, by=list(CD$date), FUN='median')
+```
+
+## Time series plot of the average number of steps taken
+```{r mean plot, echo=TRUE}
+plot(mean$Group.1, mean$x,  type='l', xlab='Date', ylab='the average of steps in 5-minutes interval per day')
+```
+
+## The 5-minute interval that, on average, contains the maximum number of steps
+```{r the date with the maximum of average steps, echo=TRUE}
+mean[which(mean$x==max(mean$x)),1]
+```
+
+## a code for Imputing missing values(NA)
+```{r the NAs, echo=TRUE}
+nrow(R_data)-nrow(CD)
+```
+
+## Histogram of the total number of steps taken each day after missing values are imputed
+```{r hist for total after NA imputing, echo=TRUE}
+hist(total$x, main='Histogram of total steps per day', xlab='')
+```
+
+## the differences in activity patterns between weekdays and weekends
+```{r differences, echo=TRUE }
+mean$week <-ifelse(weekdays(mean$Group.1, abbreviate=TRUE)=="Sun", "Weekend","Weekday")
+library(lattice)
+xyplot(x ~ Group.1 | week, data=mean, type='l', layout=c(1,2),xlab='Interval', ylab='Num. of steps')
+```
 
 
-
-## What is mean total number of steps taken per day?
-
-
-
-## What is the average daily activity pattern?
-
-
-
-## Imputing missing values
-
-
-
-## Are there differences in activity patterns between weekdays and weekends?
