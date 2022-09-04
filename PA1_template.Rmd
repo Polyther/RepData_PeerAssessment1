@@ -31,6 +31,7 @@ median <- aggregate(CD$steps, by=list(CD$date), FUN='median')
 
 ## Time series plot of the average number of steps taken
 ```{r mean plot, echo=TRUE}
+mean$Group.1 <- as.Date(mean$Group.1,'%Y-%m-%d')
 plot(mean$Group.1, mean$x,  type='l', xlab='Date', ylab='the average of steps in 5-minutes interval per day')
 ```
 
